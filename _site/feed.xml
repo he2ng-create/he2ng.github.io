@@ -1,1 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-01-19T12:55:46+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">he2ng logs</title><subtitle>일상과 개발을 기록합니다.</subtitle><author><name>he2ng</name></author></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-01-20T15:37:33+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">he2ng logs</title><subtitle>일상과 개발을 기록합니다.</subtitle><author><name>he2ng</name></author><entry><title type="html">JVM</title><link href="http://localhost:4000/posts/java/jvm/" rel="alternate" type="text/html" title="JVM" /><published>2023-01-20T13:57:56+09:00</published><updated>2023-01-20T13:57:56+09:00</updated><id>http://localhost:4000/posts/java/jvm</id><content type="html" xml:base="http://localhost:4000/posts/java/jvm/"><![CDATA[<h3 id="0-overview">0. Overview</h3>
+<h5 id="purpose">Purpose</h5>
+<ol>
+  <li>JVM의 정의를 알아봅니다.</li>
+  <li>JVM 구조를 알아봅니다.</li>
+  <li>JVM 동작 원리를 알아봅니다.</li>
+</ol>
+
+<h3 id="1-jvm">1. JVM</h3>
+<p>JVM(Java Virtual Machine)은 <strong>자바 가상 머신으로 자바 바이트 코드(.class파일)을 OS 특화된 코드로 변환하여 실행 시켜주는 가상의 머신</strong>입니다. 바이트 코드를 실행이라고 하면 바이트 코드를 인터프리터와 JIT(Just In Time) 컴파일러를 사용하여 Native OS에 맞추어 머신코드(기계어)로 변형한 다음에 최종적으론 10100 형태로 변경하여 기계가 실행 시킵니다.</p>
+
+<p>JVM의 다른 정의는 <strong>바이트 코드를 실행하는 표준이자 구현체</strong>라고 표현할 수 있습니다.</p>
+
+<ul>
+  <li>JVM Spec(표준) : https://docs.oracle.com/javase/specs/jvms/se19/html/index.html</li>
+  <li>구현 벤더 : 오라클, 아마존,..</li>
+  <li>JVM을 만드는 언어 : Sun사 JVM (C언어), IBM사 JVM : SmallTalk,..</li>
+</ul>
+
+<blockquote>
+  <p><strong>VM (Virtual Machine)</strong> 이란? <br /></p>
+  <ul>
+    <li>물리 머신 리소스를 가상화하여 생성된 격리된 가상 컴퓨팅 환경<br /></li>
+  </ul>
+
+  <p><strong>가상화</strong> 란?<br /></p>
+  <ul>
+    <li>하드웨어에 종속되어있는 리소스를 이용해 IT 서비스를 만드는 것<br /></li>
+  </ul>
+
+  <p>e.g. 1개의 서버를 파티셔닝 하여 2개의 운영체제를 올리고 각각의 태스크를 실행할 수 있도록 구성함.</p>
+</blockquote>
+
+<h3 id="2-java-바이트-코드란">2. Java 바이트 코드란?</h3>
+<p>자바 코드로 작성된 파일을 자바 컴파일러(javac)가 클래스 파일(.class)로 변경하고 <strong>클래스 파일 안에 있는 게 바이트 코드</strong> 입니다.
+바이트 코드를 인터프리터와 JIT 컴파일러가 읽어서 머신코드(기계어)로 변경합니다.
+<br />
+<br /></p>
+
+<h3 id="3-jvm-구조">3. JVM 구조</h3>
+<p><img src="/assets/images/posts/jvm.png" alt="JVM 구조 (Oracle)" /></p>
+
+<p>JVM 구조는 크게 3개의 컴포넌트로 구성되어있습니다.</p>
+<ol>
+  <li>클래스로더</li>
+  <li>실행엔진</li>
+  <li>메모리(Runtime Data Areas)</li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="4-jvm-동작-원리">4. JVM 동작 원리</h3>
+
+<h5 id="클래스로더">클래스로더</h5>
+<p>클래스(.class) 파일에서 <strong>바이트 코드를 읽고 메모리에 저장하는 일</strong>을 합니다. 3가지 과정에 의해서 동작합니다.</p>
+
+<ol>
+  <li>
+    <p>로딩<br />
+클래스를 읽어오는 과정 <br />
+과정 : <strong>부트 스트랩 클래스 로더 -&gt; 플랫폼 클래스 로더 -&gt; 앱 클래스 로더</strong> 순으로 클래스를 읽음<br /><br />
+순서 이유 ? <br />
+Deligation Principle : 클래스 로딩할 때 기본 클래스로더 윗 방향으로 클래스로딩을 위임함<br />
+Visibility Principle : 하위 클래스 로더는 상위 클래스가 로딩한 클래스를 볼 수 있지만, 상위 클래스 로더는 하위 클래스 로더가 로딩한 클래스를 볼수 없음. <br />
+Uniqueness Principle : 하위 클래스 로더는 상위 클래스로더가 로딩한 클래스를 다시 로딩하지 않기 위해서 로딩된 클래스의 유일성 보장. 식별 기준은 클래스의 binary name</p>
+  </li>
+  <li>링크<br />
+레퍼런스를 연결하는 과정 <br />
+과정 : <strong>Verify -&gt; Prepare -&gt; Resolve</strong>
+    <ul>
+      <li>Verify : .class 파일이 유효한지 체크</li>
+      <li>Prepare : static 변수, static 메소드 등 기본 값에 필요한 메모리 확보</li>
+      <li>resolve : 심볼릭 메모리 레퍼런스를 메소드 영역에 있는 레퍼런스로 교체하는 일 (전체로 일어나지 않음. 일부 <strong>Optional</strong>함)</li>
+    </ul>
+  </li>
+  <li>초기화<br />
+static 변수에 값 할당</li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h5 id="실행-엔진">실행 엔진</h5>
+<p>실행엔진은 인터프리터, JIT(Just In Time)컴파일러, GC(Garbage Collector)로 구성 되어있습니다.</p>
+
+<ol>
+  <li>
+    <p>인터프리터<br />
+바이트 코드를 한 줄씩 읽고 실행합니다. 한줄 한줄씩 컴파일하여 native code로 변환 실행합니다.</p>
+  </li>
+  <li>
+    <p>JIT(Just In Time) 컴파일러<br />
+인터프리터의 효율을 높이기 위해 바이트 코드의 반복되는 코드를 발견하면 미리 네이티브 코드로 바꾸어 실행합니다.</p>
+  </li>
+  <li>
+    <p>GC (Garbage Collector)<br />
+더이상 참조되지 않은 객체를 모아서 정리합니다.</p>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h5 id="메모리-runtime-data-area">메모리 (Runtime Data Area)</h5>
+<p>메모리는 총 5개 영역으로 구성되어있습니다. <br /> <strong>메소드 영역(method)영역, 힙(heap)영역</strong>은 공유 자원으로 <strong>다른 영역에서도 공유</strong>가 가능합니다.<br />
+<strong>스택(stack), PC(PC register), 네이티브 메소드 스택</strong>은 쓰레드에 국한되어 <strong>쓰레드 내에서만 공유</strong>합니다.<br /></p>
+<ol>
+  <li>
+    <p>메소드(method) 영역<br />
+클래스 수준의 정보(클래스 이름, 부모클래스 이름, 메소드, 변수)를 저장합니다.</p>
+  </li>
+  <li>
+    <p>힙(heap) 영역<br />
+객체 생성 시 저장합니다. GC의 대상이 됩니다.</p>
+  </li>
+  <li>
+    <p>스택(stack)<br />
+쓰레드 마다 런타임 스택을 생성하고 그 안에 스택 프레임을 쌓습니다. (스택 프레임 = method call)</p>
+  </li>
+  <li>
+    <p>PC(Program Counter)register<br />
+쓰레드 마다 쓰레드 내 현재 실행할 instruction위치를 가르키는 포인터가 생성됩니다. 쓰레드가 실행될 때마다 어느 위치를 실행하고 있는 지 알려줍니다.</p>
+  </li>
+  <li>
+    <p>네이티브 메소드 스택<br />
+네이티브 메소드 라이브러리를 사용하려면 JNI를 통해서 사용하고 사용하기 위한 스택을 생성합니다.</p>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h3 id="5-conclusion">5. Conclusion</h3>
+<p>자바로 작성한 프로그램이 JVM에서 잘 실행 되기 위해 JVM을 이해해야 겠습니다.</p>
+
+<h3 id="references">References</h3>
+<p><a href="https://www.inflearn.com/course/the-java-code-manipulation">(인프런) 더 자바, 코드를 조작하는 다양한 방법 - 백기선</a></p>]]></content><author><name>he2ng</name></author><category term="posts" /><category term="java" /><summary type="html"><![CDATA[0. Overview Purpose JVM의 정의를 알아봅니다. JVM 구조를 알아봅니다. JVM 동작 원리를 알아봅니다.]]></summary></entry></feed>
