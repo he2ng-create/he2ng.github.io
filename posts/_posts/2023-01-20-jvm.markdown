@@ -36,7 +36,7 @@ JVM의 다른 정의는 **바이트 코드를 실행하는 표준이자 구현�
 <br/>
 
 ### 3. JVM 구조 
-![JVM 구조 (Oracle)](/assets/images/posts/jvm.png)
+![JVM 구조 (Oracle)](https://iamhe2ng.github.io/he2ng.github.io/assets/images/posts/jvm.png)
 
 JVM 구조는 크게 3개의 컴포넌트로 구성되어있습니다.
 1. 클래스로더
@@ -109,7 +109,7 @@ static 변수에 값 할당
 <br>
 
 ### 5. Conclusion
-자바로 작성한 프로그램이 JVM에서 잘 실행 되기 위해 JVM을 이해해야 겠습니다. 
+JVM의 정의와 구조, 동작 원리를 살펴보았습니다. 다음은 바이트 코드가 실행 되면서 메모리에 저장되는 구조를 살펴볼 예정입니다.
 
 ### References
 [(인프런) 더 자바, 코드를 조작하는 다양한 방법 - 백기선]
