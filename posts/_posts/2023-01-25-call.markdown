@@ -1,0 +1,156 @@
+---
+layout: single
+title:  "Call By Value And Call By Reference in Java"
+date:   2023-01-25 13:57:56 +0900
+categories: java
+---
+### 0. Overview
+Call By Value, Call By Reference를 바로 이해하고 Java 내에서는 어떻게 사용되고 있는 지 알아봅니다.
+
+##### Purpose
+1. Call By Value, Call By Reference를 알아봅니다.
+2. Java 내에서 Call By Value, Call By Reference를 이해해봅니다.
+
+### 1. Call By Value, Call By Reference
+Call By Value와 Call By Reference는 함수로 값을 넘겨 줄 때에 사용됩니다. 인자를 전달하는 방식은 두 가지로 동작하는 데 Call By Value와 Call By Reference 방식입니다.
+
+##### Call By Value
+
+- 기본 C언어에서 지원하는 방식
+
+함수에서 값을 복사해서 전달하는 방식 
+```
+#include <stdio.h>
+
+void swap(int a, int b) {
+	int temp;
+	
+	temp = a;
+	a = b;
+	b = temp;
+}
+
+int main() {
+	int a, b;
+	
+	a = 10;
+	b = 20;
+	
+	printf("swap 전 : %d %d\n", a, b);
+	
+	swap(a, b);
+	
+	printf("swap 후 : %d %d\n", a, b);
+	
+	return 0;
+}
+```
+
+실행 결과 
+```
+swap 전 : 10 20
+swap 후 : 10 20
+```
+
+main 함수에서 swap(a, b) 실행 시 a, b는 값만 복사 되어 새로운 변수에 할당 된다. main 함수의 int a, b에는 영향 없이 10, 20 그대로 출력 된다.
+
+장점 : 복사하여 처리하기 때문에 원래 값에 영향을 안줍니다. (안전함)<br/>
+단점 : 복사하여 새롭게 변수를 생성하기 때문에 메모리 사용량이 많습니다.
+
+
+##### Call By Reference
+
+- C언어에서 공식적으로 지원하지 않음
+
+함수에서 값을 전달하는 대신 주소값을 전달하는 방식
+
+```
+#include <stdio.h>
+
+void swap(int *a, int *b)
+{
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int main()
+{
+	int a, b;
+
+	a = 10;
+	b = 20;
+
+	printf("swap 전 : %d %d\n", a, b);
+
+	swap(&a, &b);
+
+	printf("swap 후 : %d %d\n", a, b);
+
+	return 0;
+}
+```
+
+실행 결과 
+```
+swap 전 : 10 20
+swap 후 : 20 10
+```
+main 함수에서 swap(&a, &b)를 실행할 때에 &a(주소값)을 넘기기 때문에 main의 a, b 변수에 영향을 줍니다.
+
+장점 : 복사하지 않고 참조를 넘기기때문에 속도가 빠릅니다. <br/>
+단점 : 직접 참조하기 때문에 원래 값에 영향을 줍니다.
+<br/>
+<br/>
+### 2. Java 내에서 Call By Value, Call By Reference
+
+자바에서는 Call By Value를 사용합니다. 다만 클래스를 인자로 넘길때에 동작 방식이 Call By Reference로 오인하기가 쉽습니다.
+
+```
+public class Calc {
+    int data = 50;
+
+    void add(int data) {
+        data = data + 100;
+    }
+
+    public static void main(String[] args) {
+        final Calc calc = new Calc();
+        System.out.println("Before : " + calc.data);
+        calc.add(50);
+        System.out.println("After : " + calc.data);
+    }
+}
+```
+
+실행 결과 
+```
+Before : 50
+After : 50
+```
+<br/>
+
+```
+public class Calc {
+    int data = 50;
+
+    void add(Calc calc) {
+        calc.data = calc.data + 100;
+    }
+
+    public static void main(String[] args) {
+        final Calc calc = new Calc();
+        System.out.println("Before : " + calc.data);
+        calc.add(calc);
+        System.out.println("After : " + calc.data);
+    }
+}
+```
+
+실행 결과 
+```
+Before : 50
+After : 150
+```
